@@ -21,6 +21,9 @@
   },
   "homepage": "https://github.com/Alialx/superteam-malaysia-website#readme",
   "dependencies": {
+    "@sanity/image-url": "^2.0.3",
+    "@supabase/ssr": "^0.9.0",
+    "@supabase/supabase-js": "^2.98.0",
     "@types/node": "^25.3.3",
     "@types/react": "^19.2.14",
     "autoprefixer": "^10.4.27",
