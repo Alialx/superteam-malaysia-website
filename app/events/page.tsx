@@ -13,7 +13,7 @@ export default async function EventsPage() {
   const hasPast = past.length > 0;
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-4 py-16 text-neutral-50">
+    <main className="min-h-screen px-4 py-16 text-neutral-50">
       <section className="mx-auto flex w-full max-w-5xl flex-col gap-10">
         <header className="space-y-2">
           <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">

@@ -44,7 +44,7 @@ export default async function EventDetailPage({
   const isUpcoming = event.status === "upcoming";
 
   return (
-    <main className="min-h-screen bg-neutral-950 px-4 py-16 text-neutral-50">
+    <main className="min-h-screen px-4 py-16 text-neutral-50">
       <article className="mx-auto flex w-full max-w-3xl flex-col gap-8">
         <header className="space-y-3">
           <p className="text-xs uppercase tracking-wide text-neutral-500">
