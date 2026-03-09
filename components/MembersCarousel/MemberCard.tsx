@@ -1,15 +1,4 @@
-import { useState, useEffect, useRef, useCallback, memo } from "react";
-
-/* ─────────────────────────────────────────────
-   TYPES
-───────────────────────────────────────────── */
-type BadgeKey =
-  | "Solana Builder"
-  | "Hackathon Winner"
-  | "Core Contributor"
-  | "Grant Recipient"
-  | "Bounty Hunter"
-  | "DAO Steward";
+import { useState, useCallback, memo } from "react";
 
 interface Achievement {
   icon: string;
@@ -25,7 +14,6 @@ export default interface Member {
   company: string;
   avatar: string;
   skills: string[];
-  badges: BadgeKey[];
   twitter: string;
   achievements: Achievement[];
 }
@@ -42,23 +30,13 @@ interface MemberCardProps {
 }
 
 /* ─────────────────────────────────────────────
-   CONSTANTS & DATA
+   CONSTANTS
 ───────────────────────────────────────────── */
-const ACCENT     = "#5C4F9C";
-const CARD_BG    = "#3C2B8C";
-const INNER_BG   = "#07050B";
-const CARD_W     = 337;   // px
-const CARD_H     = 450;   // px
-
-
-const BADGE_CONFIG: Record<BadgeKey, { icon: string }> = {
-  "Solana Builder":   { icon: "◈" },
-  "Hackathon Winner": { icon: "⚡" },
-  "Core Contributor": { icon: "◆" },
-  "Grant Recipient":  { icon: "◎" },
-  "Bounty Hunter":    { icon: "◉" },
-  "DAO Steward":      { icon: "◐" },
-};
+const ACCENT   = "#5C4F9C";
+const CARD_BG  = "#3C2B8C";
+const INNER_BG = "#07050B";
+const CARD_W   = 337;
+const CARD_H   = 450;
 
 /* ─────────────────────────────────────────────
    MODAL
@@ -109,28 +87,14 @@ function Modal({ member, onClose }: ModalProps) {
               style={{ width: "56px", height: "56px", borderRadius: "14px", border: `2px solid ${ACCENT}55` }}
             />
             <div>
-              <div style={{ color: "#fff", fontWeight: 700, fontSize: "20px" }}>{member.name}</div>
-              <div style={{ color: "#b8aee0", fontSize: "13px" }}>{member.role} · {member.company}</div>
+              <div style={{ color: "#fffff", fontWeight: 700, fontSize: "20px" }}>{member.name}</div>
+              <div style={{ color: "#fff", fontSize: "13px" }}>{member.role} · {member.company}</div>
               <a
-                href={`https://twitter.com/${member.twitter.replace("@", "")}`}
+                href={`https://twitter.com/${member.twitter.replace(/^.*\/|@/g, "")}`}
                 target="_blank" rel="noreferrer"
                 style={{ color: "#c4b8e8", fontSize: "12px", textDecoration: "none" }}
               >{member.twitter}</a>
             </div>
-          </div>
-
-          {/* badges */}
-          <div style={{ display: "flex", flexWrap: "wrap", gap: "7px", marginBottom: "20px" }}>
-            {member.badges.map((b) => (
-              <span key={b} style={{
-                display: "flex", alignItems: "center", gap: "6px",
-                padding: "5px 13px", borderRadius: "999px", fontSize: "12px",
-                background: "rgba(255,255,255,0.08)", border: "1px solid rgba(255,255,255,0.18)",
-              }}>
-                <span style={{ color: "#e2d9ff", fontSize: "13px" }}>{BADGE_CONFIG[b].icon}</span>
-                <span style={{ color: "#e2d9ff" }}>{b}</span>
-              </span>
-            ))}
           </div>
 
           <div style={{
@@ -151,15 +115,17 @@ function Modal({ member, onClose }: ModalProps) {
                   display: "flex", alignItems: "center", justifyContent: "center",
                   fontSize: "20px", background: `${ACCENT}22`, border: `1px solid ${ACCENT}40`,
                 }}>{a.icon}</div>
-                <div>
-                  <div style={{ display: "flex", justifyContent: "space-between", gap: "8px" }}>
-                    <div style={{ color: "#ffffff", fontSize: "14px", fontWeight: 600 }}>{a.title}</div>
-                    <div style={{ color: "#9d8fc4", fontSize: "11px", flexShrink: 0 }}>{a.year}</div>
-                  </div>
+              <div>
+                <div style={{ display: "flex", justifyContent: "space-between", gap: "8px" }}>
+                  <div style={{ color: "#ffffff", fontSize: "14px", fontWeight: 600 }}>{a.title}</div>
+                  <div style={{ color: "#9d8fc4", fontSize: "11px", flexShrink: 0 }}>{a.year}</div>
+                </div>
+                {a.description && (
                   <div style={{ color: "#c4b8e8", fontSize: "12px", marginTop: "3px", lineHeight: "1.5" }}>
                     {a.description}
                   </div>
-                </div>
+                )}
+              </div>
               </div>
             ))}
           </div>
@@ -195,18 +161,22 @@ export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: 
           flexShrink: 0,
           cursor: "pointer",
           userSelect: "none",
+          transform: hovered? "scale(1.02)" : "scale(1)",
+          transition: "transform 1s cubic-bezier(0,34. 1.56, 0.64,1)",
+          zIndex: hovered ? 10: 1,
         }}
       >
-        {/* glow bloom */}
-        <div style={{
-          position: "absolute", inset: 0, borderRadius: "14px",
-          pointerEvents: "none", zIndex: 0,
-          background: `radial-gradient(ellipse at 50% 115%, ${ACCENT}72, transparent 60%)`,
-          filter: "blur(22px)",
-          transform: "translateY(14px) scaleX(0.82)",
-          opacity: hovered ? 1 : 0.4,
-          transition: "opacity 0.35s ease",
-        }} />
+{/* glow bloom */}
+<div style={{
+  position: "absolute", inset: "-10px",                   // ← bleeds outside card edges
+  borderRadius: "14px",
+  pointerEvents: "none", zIndex: 0,
+  background: `radial-gradient(ellipse at 50% 110%, ${ACCENT}, transparent 65%)`,
+  filter: "blur(30px)",
+  transform: "translateY(18px) scaleX(0.85)",
+  opacity: hovered ? 0.9 : 0,
+  transition: "opacity 0.35s ease",
+}} />
 
         {/* flip wrapper */}
         <div style={{
@@ -226,7 +196,6 @@ export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: 
               : `0 0 0 1px ${ACCENT}20, 0 10px 35px rgba(0,0,0,0.65)`,
             transition: "box-shadow 0.35s ease",
           }}>
-            {/* blur orb */}
             <div style={{
               position: "absolute", width: "224px", height: "192px",
               background: "white", filter: "blur(50px)",
@@ -235,7 +204,6 @@ export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: 
               transition: "opacity 0.35s ease",
             }} />
 
-            {/* inner dark surface */}
             <div style={{
               position: "absolute", inset: "2px", borderRadius: "10px",
               background: INNER_BG, zIndex: 1,
@@ -256,38 +224,47 @@ export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: 
                 }} />
               </div>
 
-              {/* name / role strip */}
               <div style={{ padding: "10px 12px 12px", flexShrink: 0 }}>
-                <div style={{ color: "#fff", fontWeight: 700, fontSize: "14px", lineHeight: "1.2", letterSpacing: "-0.01em" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "4px", marginTop: "8px" }}>
+                <div style={{ color: "#fffff", fontWeight: 700, fontSize: "20px", lineHeight: "1.2", letterSpacing: "-0.01em" }}>
                   {member.name}
                 </div>
-                <div style={{ color: "#6b7280", fontSize: "10px", marginTop: "2px" }}>{member.role}</div>
-                <div style={{ color: `${ACCENT}bb`, fontSize: "10px" }}>{member.company}</div>
-
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginTop: "8px" }}>
-                  {member.skills.map((s) => (
-                    <span key={s} style={{
-                      padding: "2px 8px", borderRadius: "999px",
-                      fontSize: "9px", fontWeight: 600, letterSpacing: "0.04em",
-                      background: `${ACCENT}14`, color: `${ACCENT}dd`, border: `1px solid ${ACCENT}30`,
-                    }}>{s}</span>
-                  ))}
                   <a
-                    href={`https://twitter.com/${member.twitter.replace("@", "")}`}
+                    href={`https://twitter.com/${member.twitter.replace(/^.*\/|@/g, "")}`}
                     onClick={(e) => e.stopPropagation()}
                     target="_blank" rel="noreferrer"
                     style={{
                       display: "flex", alignItems: "center", gap: "3px",
-                      padding: "2px 8px", borderRadius: "999px", fontSize: "9px",
+                      padding: "2px 8px", borderRadius: "999px", fontSize: "12px",
                       background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.12)",
                       color: "#9ca3af", textDecoration: "none",
                     }}
                   >
-                    <svg viewBox="0 0 24 24" style={{ width: "8px", height: "8px", fill: "#9ca3af" }}>
+                    <svg viewBox="0 0 24 24" style={{ width: "12px", height: "12px", fill: "#9ca3af" }}>
                       <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.741l7.73-8.835L1.254 2.25H8.08l4.253 5.622zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
                     </svg>
                     {member.twitter}
                   </a>
+                </div>
+                
+                <div style={{ color: "#fff", fontSize: "10px", marginTop: "2px" }}>{member.role}</div>
+                <div style={{ color: `${ACCENT}bb`, fontSize: "12px" }}>{member.company}</div>
+
+                <div style={{ display: "flex", flexWrap: "wrap", gap: "4px", marginTop: "8px" }}>
+                  {member.skills.slice(0, 2).map((s, i) => (
+                    <span key={`skill-${i}-${s}`} style={{
+                      padding: "2px 8px", borderRadius: "999px",
+                      fontSize: "12px", fontWeight: 600, letterSpacing: "0.04em",
+                      background: `${ACCENT}14`, color: `${ACCENT}dd`, border: `1px solid ${ACCENT}30`,
+                    }}>{s}</span>
+                  ))}
+                  {member.skills.length > 2 && (
+                    <span style={{
+                      padding: "2px 8px", borderRadius: "999px",
+                      fontSize: "12px", fontWeight: 600,
+                      background: `${ACCENT}14`, color: `${ACCENT}99`, border: `1px solid ${ACCENT}30`,
+                    }}>+{member.skills.length - 2}</span>
+                  )}
                 </div>
               </div>
             </div>
@@ -301,14 +278,12 @@ export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: 
             backgroundColor: CARD_BG,
             boxShadow: `0 0 0 1px ${ACCENT}55, 0 20px 55px rgba(0,0,0,0.8), 0 0 50px ${ACCENT}30`,
           }}>
-            {/* blur orb */}
             <div style={{
               position: "absolute", width: "224px", height: "192px",
               background: "white", filter: "blur(50px)",
               left: "-50%", top: "-50%", zIndex: 0, opacity: 0.07,
             }} />
 
-            {/* inner dark surface */}
             <div style={{
               position: "absolute", inset: "2px", borderRadius: "10px",
               background: INNER_BG, zIndex: 1, overflow: "hidden",
@@ -339,34 +314,22 @@ export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: 
                         display: "flex", alignItems: "center", justifyContent: "center",
                         fontSize: "20px", background: `${ACCENT}22`,
                       }}>{a.icon}</div>
-                      <div style={{ minWidth: 0 }}>
-                        <div style={{
-                          color: "#ffffff", fontSize: "13px", fontWeight: 600,
-                          overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                        }}>{a.title}</div>
-                        <div style={{
-                          color: "#c4b8e8", fontSize: "11px", lineHeight: "1.4", marginTop: "3px",
-                          overflow: "hidden", display: "-webkit-box",
-                          WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const,
-                        }}>{a.description}</div>
-                      </div>
+                        <div style={{ minWidth: 0 }}>
+                          <div style={{
+                            color: "#ffffff", fontSize: "13px", fontWeight: 600,
+                            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                          }}>{a.title}</div>
+                          {a.description && (
+                            <div style={{
+                              color: "#c4b8e8", fontSize: "11px", lineHeight: "1.4", marginTop: "3px",
+                              overflow: "hidden", display: "-webkit-box",
+                              WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const,
+                            }}>{a.description}</div>
+                          )}
+                        </div>
                     </div>
                   ))}
                 </div>
-
-                <div style={{ display: "flex", flexWrap: "wrap", gap: "6px", marginTop: "14px" }}>
-                  {member.badges.map((b) => (
-                    <span key={b} style={{
-                      display: "flex", alignItems: "center", gap: "5px",
-                      padding: "4px 10px", borderRadius: "999px", fontSize: "11px",
-                      background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.15)",
-                    }}>
-                      <span style={{ color: "#e2d9ff" }}>{BADGE_CONFIG[b].icon}</span>
-                      <span style={{ color: "#d4c9f5" }}>{b}</span>
-                    </span>
-                  ))}
-                </div>
-
                 <button
                   onClick={(e) => { e.stopPropagation(); setModalOpen(true); }}
                   style={{
@@ -383,8 +346,8 @@ export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: 
             </div>
           </div>
 
-        </div>{/* /flip wrapper */}
-      </div>{/* /perspective container */}
+        </div>
+      </div>
 
       {modalOpen && <Modal member={member} onClose={() => setModalOpen(false)} />}
     </>

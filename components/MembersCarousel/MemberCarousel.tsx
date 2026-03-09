@@ -1,19 +1,29 @@
+"use client"
 import { useState, useEffect, useRef, useCallback, memo } from "react";
-import Member from "@/components/MemberCard";
-import { MemberCard } from "@/components/MemberCard";
-
+import Member from "@/components/MembersCarousel/MemberCard";
+import { MemberCard } from "@/components/MembersCarousel/MemberCard";
+import { getAllMembers, mapSanityMembers } from '@/lib/sanity/queries'
 
 const CARD_W     = 337;   // px
 const GAP        = 32;    // px between cards
 const SPEED      = 80;    // px/s nominal scroll speed
 const SMOOTH_TAU = 0.28;  // velocity-smoothing time constant (seconds)
 const COPIES     = 4;     // track duplicates for seamless loop
+const raw = await getAllMembers()
+const MEMBERS = mapSanityMembers(raw)
 
-interface CardCarouselLoopProps {
-    members: Member[];
-  }
+const members: Member[] = MEMBERS.map((m: any, index: number) => ({
+  id: index,           
+  name: m.name,
+  role: m.role,
+  company: m.company,
+  avatar: m.avatar,
+  twitter: m.twitter,
+  skills: m.skills ?? [],
+  achievements: m.achievements ?? [],
+}))
 
-export function CardCarouselLoop({ members }: CardCarouselLoopProps) {
+export function CardCarouselLoop() {
     const trackRef    = useRef<HTMLDivElement>(null);
     const isHoveredRef = useRef<boolean>(false);
   
@@ -26,8 +36,12 @@ export function CardCarouselLoop({ members }: CardCarouselLoopProps) {
     }, []);
   
     const handleMouseEnter = useCallback(() => { isHoveredRef.current = true; }, []);
-    const handleMouseLeave = useCallback(() => { isHoveredRef.current = false; }, []);
-  
+    const handleMouseLeave = useCallback(() =>
+    {
+      isHoveredRef.current = false;
+      setFlippedIds({});  
+    }, []);
+    
     /* RAF animation loop */
     useEffect(() => {
       if (!trackRef.current || seqWidth === 0) return;
@@ -61,12 +75,13 @@ export function CardCarouselLoop({ members }: CardCarouselLoopProps) {
       <div
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
+
         style={{
           width: "100%",
           overflow: "hidden",
           position: "relative",
           WebkitMaskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
-          maskImage:        "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
+          maskImage: "linear-gradient(to right, transparent 0%, black 8%, black 92%, transparent 100%)",
         }}
       >
         <div
