@@ -20,32 +20,26 @@ export const memberType = defineType({
     defineField({
       name: 'company',
       title: 'Company',
-      type: 'string',        // e.g. "Freelance"
+      type: 'string',
     }),
     defineField({
       name: 'avatar',
       title: 'Avatar',
       type: 'image',
-      options: { hotspot: true },   // lets you crop focal point
+      options: { hotspot: true }, 
       validation: Rule => Rule.required()
     }),
     defineField({
       name: 'twitter',
       title: 'Twitter / X Handle',
-      type: 'string',        // store as "@handle"
+      type: 'string',
       validation: Rule => Rule.required()
     }),
     defineField({
         name: 'skills',
         title: 'Skills',
         type: 'array',
-        of: [{ type: 'reference', to: [{ type: 'skill' }] }],
-      }),
-      defineField({
-        name: 'badges',
-        title: 'Badges',
-        type: 'array',
-        of: [{ type: 'reference', to: [{ type: 'badge' }] }],
+        of: [{ type: 'reference', to: [{ type: 'skill' }], validation: Rule => Rule.required()}],
       }),
     defineField({
       name: 'achievements',
@@ -55,9 +49,9 @@ export const memberType = defineType({
         {
           type: 'object',
           fields: [
-            defineField({ name: 'icon',        title: 'Icon (emoji)',   type: 'string' }),
+            defineField({ name: 'image',        title: 'Achievement Image (Optional)',   type: 'image', options: { hotspot: true} }),
             defineField({ name: 'title',       title: 'Title',          type: 'string', validation: Rule => Rule.required() }),
-            defineField({ name: 'description', title: 'Description',    type: 'text',   rows: 2 }),
+            defineField({ name: 'description', title: 'Description (Optional)',    type: 'text',   rows: 2 }),
             defineField({ name: 'year',        title: 'Year',           type: 'string' }),
           ],
           preview: {
