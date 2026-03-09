@@ -1,18 +1,14 @@
 'use client';
 
 import { useState, useEffect, useRef, useCallback } from 'react';
-import Member from '@/components/MembersCarousel/MemberCard';
 import { MemberCard } from '@/components/MembersCarousel/MemberCard';
+import { CardCarouselLoopProps } from '@/types';
 
 const CARD_W     = 337;
 const GAP        = 32;
 const SPEED      = 80;
 const SMOOTH_TAU = 0.28;
 const COPIES     = 4;
-
-interface CardCarouselLoopProps {
-  members: Member[];
-}
 
 export function CardCarouselLoop({ members }: CardCarouselLoopProps) {
   const trackRef     = useRef<HTMLDivElement>(null);

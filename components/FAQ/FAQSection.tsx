@@ -2,17 +2,7 @@
 
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-
-interface FAQItem {
-  _id: string
-  question: string
-  answer: string
-  displayOrder: number
-}
-
-interface FAQSectionProps {
-  faqs: FAQItem[]
-}
+import { FAQItem, FAQSectionProps } from '@/types';
 
 function AccordionItem({ faq, index }: { faq: FAQItem; index: number }) {
   const [open, setOpen] = useState(index === 0)

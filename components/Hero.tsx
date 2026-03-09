@@ -6,16 +6,15 @@ import ShinyText from '@/components/ShinyText' // adjust path if needed
 
 export default function HeroSection() {
   return (
-    <div className="flex-1 max-w-6xl flex flex-col gap-6 sm:gap-8 lg:gap-10">
+    <div className="flex-1 max-w-6xl flex flex-col gap-2 sm:gap-6 lg:gap-10">
       <motion.h1
         initial={{ opacity: 0, y: 28 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-        className="font-bold leading-tight max-w-6xl text-[clamp(1.5rem,5vw,4.5rem)]"
+        className="font-bold leading-tight max-w-6xl text-[clamp(1.5rem,6vw,4.5rem)]"
       >
-        Malaysia&apos;s Home
-        <br />
-        for Solana Builders
+        Malaysia&apos;s <br /> Home
+        for <br /> Solana Builders
       </motion.h1>
 
       <motion.div

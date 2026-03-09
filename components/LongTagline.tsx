@@ -1,6 +1,6 @@
 "use client"
 
-import ScrambledText from '@/components/ScambleText';
+import ScrambledText from '@/components/ScrambleText';
 import { motion } from 'framer-motion'
 
 export default function LongTagline() {
@@ -19,7 +19,7 @@ export default function LongTagline() {
         speed={0.5}
         scrambleChars=".:"
         >
-        <span className="text-clamp(1rem,1.2vm,2rem) font-light text-white italic text-left">
+        <span className="text-clamp(1rem,2.5vm,2rem) font-light text-white italic text-left">
             Superteam Malaysia exists to give every builder, creator, and founder the tools, network, and opportunities they need{" "}
             <a
             href="#"

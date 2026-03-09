@@ -2,20 +2,7 @@
 
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { motion, useMotionValue, useAnimationFrame, useTransform } from 'framer-motion';
-
-interface ShinyTextProps {
-  text: string;
-  disabled?: boolean;
-  speed?: number;
-  className?: string;
-  color?: string;
-  shineColor?: string;
-  spread?: number;
-  yoyo?: boolean;
-  pauseOnHover?: boolean;
-  direction?: 'left' | 'right';
-  delay?: number;
-}
+import { ShinyTextProps } from '@/types';
 
 const ShinyText: React.FC<ShinyTextProps> = ({
   text,

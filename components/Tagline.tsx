@@ -1,11 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-
-interface AnimatedTaglineProps {
-  text: string
-  className?: string
-}
+import { AnimatedTaglineProps } from '@/types'
 
 export default function AnimatedTagline({ text, className = "" }: AnimatedTaglineProps) {
   return (

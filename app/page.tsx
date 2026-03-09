@@ -25,7 +25,7 @@ export default function HomePage() {
 
   {/* ── HERO ── */}
   <section
-  className="relative w-full min-h-screen overflow-hidden bg-[url('/assets/Hero-bg.png')] bg-[length:100%_auto] bg-top bg-no-repeat"
+  className="relative w-full min-h-screen overflow-hidden bg-[url('/assets/Hero-bg.png')]  lg:bg-[length:100%_auto] bg-top bg-no-repeat bg-[length:120%_auto] "
   >
     {/* Content */}
     <div className="relative z-10 flex flex-col lg:flex-row items-start justify-between max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 pt-[clamp(6rem,18vw,22.5rem)] pb-8 md:pb-30 lg:pb-64">

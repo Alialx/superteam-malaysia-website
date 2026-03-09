@@ -3,21 +3,9 @@
 import React, { useEffect, useRef, useMemo, ReactNode, RefObject } from 'react';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { ScrollRevealProps } from '@/types';
 
 gsap.registerPlugin(ScrollTrigger);
-
-interface ScrollRevealProps {
-  children: ReactNode;
-  scrollContainerRef?: RefObject<HTMLElement>;
-  enableBlur?: boolean;
-  baseOpacity?: number;
-  baseRotation?: number;
-  blurStrength?: number;
-  containerClassName?: string;
-  textClassName?: string;
-  rotationEnd?: string;
-  wordAnimationEnd?: string;
-}
 
 const ScrollReveal: React.FC<ScrollRevealProps> = ({
   children,

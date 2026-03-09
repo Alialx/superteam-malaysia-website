@@ -1,33 +1,5 @@
 import { useState, useCallback, memo } from "react";
-
-interface Achievement {
-  icon: string;
-  title: string;
-  description: string;
-  year: string;
-}
-
-export default interface Member {
-  id: number;
-  name: string;
-  role: string;
-  company: string;
-  avatar: string;
-  skills: string[];
-  twitter: string;
-  achievements: Achievement[];
-}
-
-interface ModalProps {
-  member: Member;
-  onClose: () => void;
-}
-
-interface MemberCardProps {
-  member: Member;
-  flipped: boolean;
-  onFlip: () => void;
-}
+import { ModalProps, MemberCardProps} from '@/types';
 
 /* ─────────────────────────────────────────────
    CONSTANTS

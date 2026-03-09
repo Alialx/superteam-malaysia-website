@@ -1,11 +1,7 @@
 "use client"
 
 import { motion } from "framer-motion"
-
-interface AnimatedTextProps {
-    text: string
-    className?: string
-}
+import { AnimatedTextProps } from "@/types"
 
 export default function AnimatedText({ text, className = ""}: AnimatedTextProps) {
     return (

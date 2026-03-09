@@ -1,13 +1,7 @@
 "use client"
 
 import { motion } from 'framer-motion'
-
-interface ImageCardClientProps {
-  title: string
-  image: string
-  index: number
-  className?: string
-}
+import { ImageCardClientProps } from '@/types'
 
 export default function ImageCardClient({ title, image, index, className = "" }: ImageCardClientProps) {
   return (

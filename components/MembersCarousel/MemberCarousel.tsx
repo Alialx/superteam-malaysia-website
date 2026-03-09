@@ -1,6 +1,6 @@
 "use client"
 import { useState, useEffect, useRef, useCallback, memo } from "react";
-import Member from "@/components/MembersCarousel/MemberCard";
+import { Member }from "@/types";
 import { MemberCard } from "@/components/MembersCarousel/MemberCard";
 import { getAllMembers, mapSanityMembers } from '@/lib/sanity/queries'
 
