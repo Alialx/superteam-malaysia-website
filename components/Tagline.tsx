@@ -13,7 +13,7 @@ export default function AnimatedTagline({ text, className = "" }: AnimatedTaglin
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 1, delay: 0.4 }}
-      className="text-white text-center py-8 mt-30"
+      className="text-white text-center py-8"
     >
       <motion.p
         initial={{ opacity: 0, y: 20 }}

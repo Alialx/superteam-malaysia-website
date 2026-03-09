@@ -10,7 +10,7 @@ export default function LongTagline() {
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true, margin: "-80px" }}
         transition={{ duration: 0.9, ease: [0.21, 0.47, 0.32, 0.98] }}
-        className="max-w-6xl mx-auto px-8 py-2"
+        className="max-w-6xl mx-auto px-2 lg:px-8 lg:py-2"
         >
         <ScrambledText
         className="scrambled-text-demo"
@@ -19,9 +19,8 @@ export default function LongTagline() {
         speed={0.5}
         scrambleChars=".:"
         >
-        <span className="block text-3xl font-light leading-relaxed text-white italic text-left">
-            Superteam Malaysia exists to give every builder, creator, and founder the tools, network,
-            and opportunities they need{" "}
+        <span className="text-clamp(1rem,1.2vm,2rem) font-light text-white italic text-left">
+            Superteam Malaysia exists to give every builder, creator, and founder the tools, network, and opportunities they need{" "}
             <a
             href="#"
             className="text-indigo-400 italic hover:text-indigo-300 transition-colors duration-200"

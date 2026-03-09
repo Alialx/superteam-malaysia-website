@@ -37,6 +37,14 @@ export interface SanityFAQ {
   displayOrder: number
 }
 
+export interface SanityStat {
+  _id: string
+  label: string
+  value: number
+  suffix?: string
+  icon?: string
+}
+
 // QUERIES
 const MEMBERS_QUERY = `*[_type == "member"] | order(displayOrder asc) {
   _id,
@@ -83,6 +91,14 @@ const FAQ_QUERY = `*[_type == "faq"] | order(displayOrder asc) {
   displayOrder
 }`
 
+const STATS_QUERY = `*[_type == "stat"] | order(displayOrder asc) {
+  _id,
+  label,
+  value,
+  suffix,
+  icon,
+}`
+
 export async function getAllMembers(): Promise<SanityMember[]> {
   return sanityClient.fetch(MEMBERS_QUERY)
 }
@@ -101,6 +117,10 @@ export async function getImageCards(): Promise<SanityImageCard[]> {
 
 export async function getFAQs(): Promise<SanityFAQ[]> {
   return sanityClient.fetch(FAQ_QUERY, {}, { next: { revalidate: 3600 } })
+}
+
+export async function getStats(): Promise<SanityStat[]> {
+  return sanityClient.fetch(STATS_QUERY)
 }
 
 export function mapSanityMember(member: SanityMember, index: number) {

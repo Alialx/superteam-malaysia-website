@@ -34,7 +34,7 @@ export default function HeroSection() {
           yoyo={false}
           pauseOnHover={false}
           disabled={false}
-          className="text-[clamp(1rem,2.5vw,1.5rem)] text-white font-extralight italic max-w-[350px] leading-relaxed"
+          className="text-[clamp(1rem,2.5vw,1.5rem)] text-white font-extralight italic max-w-[250px] md:max-w-[350px]  lg:max-w-[400px] leading-relaxed"
         />
       </motion.div>
 
