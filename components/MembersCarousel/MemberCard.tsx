@@ -1,18 +1,27 @@
 import { useState, useCallback, memo } from "react";
 import { ModalProps, MemberCardProps} from '@/types';
 
-/* ─────────────────────────────────────────────
-   CONSTANTS
-───────────────────────────────────────────── */
 const ACCENT   = "#5C4F9C";
 const CARD_BG  = "#3C2B8C";
 const INNER_BG = "#07050B";
+const BORDER   = "#444444";
+const CORNER   = "#3C2B8C";
 const CARD_W   = 337;
 const CARD_H   = 450;
 
-/* ─────────────────────────────────────────────
-   MODAL
-───────────────────────────────────────────── */
+function CornerBrackets({ size = 12, thickness = 2, color = CORNER }: { size?: number; thickness?: number; color?: string }) {
+  const s: React.CSSProperties = { position: "absolute", width: `${size}px`, height: `${size}px` };
+  const b = `${thickness}px solid ${color}`;
+  return (
+    <>
+      <span style={{ ...s, top: 0, left: 0,     borderTop: b, borderLeft: b }} />
+      <span style={{ ...s, top: 0, right: 0,    borderTop: b, borderRight: b }} />
+      <span style={{ ...s, bottom: 0, left: 0,  borderBottom: b, borderLeft: b }} />
+      <span style={{ ...s, bottom: 0, right: 0, borderBottom: b, borderRight: b }} />
+    </>
+  );
+}
+
 function Modal({ member, onClose }: ModalProps) {
   return (
     <div
@@ -33,7 +42,6 @@ function Modal({ member, onClose }: ModalProps) {
           boxShadow: `0 0 80px ${ACCENT}25, 0 0 160px ${ACCENT}08`,
         }}
       >
-        {/* top glow */}
         <div style={{
           position: "absolute", top: 0, left: 0, right: 0, height: "100px", opacity: 0.3,
           background: `radial-gradient(ellipse at 50% 0%, ${ACCENT}, transparent 70%)`,
@@ -52,14 +60,13 @@ function Modal({ member, onClose }: ModalProps) {
             }}
           >✕</button>
 
-          {/* header */}
           <div style={{ display: "flex", gap: "14px", alignItems: "center", marginBottom: "20px" }}>
             <img
               src={member.avatar} alt={member.name}
               style={{ width: "56px", height: "56px", borderRadius: "14px", border: `2px solid ${ACCENT}55` }}
             />
             <div>
-              <div style={{ color: "#fffff", fontWeight: 700, fontSize: "20px" }}>{member.name}</div>
+              <div style={{ color: "#ffffff", fontWeight: 700, fontSize: "20px" }}>{member.name}</div>
               <div style={{ color: "#fff", fontSize: "13px" }}>{member.role} · {member.company}</div>
               <a
                 href={`https://twitter.com/${member.twitter.replace(/^.*\/|@/g, "")}`}
@@ -107,9 +114,6 @@ function Modal({ member, onClose }: ModalProps) {
   );
 }
 
-/* ─────────────────────────────────────────────
-   MEMBER CARD
-───────────────────────────────────────────── */
 export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: MemberCardProps) {
   const [modalOpen, setModalOpen] = useState<boolean>(false);
   const [hovered,   setHovered]   = useState<boolean>(false);
@@ -133,24 +137,22 @@ export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: 
           flexShrink: 0,
           cursor: "pointer",
           userSelect: "none",
-          transform: hovered? "scale(1.02)" : "scale(1)",
-          transition: "transform 1s cubic-bezier(0,34. 1.56, 0.64,1)",
-          zIndex: hovered ? 10: 1,
+          transform: hovered ? "scale(1.02)" : "scale(1)",
+          transition: "transform 1s cubic-bezier(0.34, 1.56, 0.64, 1)",
+          zIndex: hovered ? 10 : 1,
         }}
       >
-{/* glow bloom */}
-<div style={{
-  position: "absolute", inset: "-10px",                   // ← bleeds outside card edges
-  borderRadius: "14px",
-  pointerEvents: "none", zIndex: 0,
-  background: `radial-gradient(ellipse at 50% 110%, ${ACCENT}, transparent 65%)`,
-  filter: "blur(30px)",
-  transform: "translateY(18px) scaleX(0.85)",
-  opacity: hovered ? 0.9 : 0,
-  transition: "opacity 0.35s ease",
-}} />
+        <div style={{
+          position: "absolute", inset: "-10px",
+          borderRadius: "14px",
+          pointerEvents: "none", zIndex: 0,
+          background: `radial-gradient(ellipse at 50% 110%, ${ACCENT}, transparent 65%)`,
+          filter: "blur(30px)",
+          transform: "translateY(18px) scaleX(0.85)",
+          opacity: hovered ? 0.9 : 0,
+          transition: "opacity 0.35s ease",
+        }} />
 
-        {/* flip wrapper */}
         <div style={{
           position: "relative", width: "100%", height: "100%",
           transformStyle: "preserve-3d",
@@ -158,16 +160,19 @@ export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: 
           transition: "transform 0.72s cubic-bezier(0.4,0.2,0.2,1)",
         }}>
 
-          {/* ══ FRONT ══ */}
           <div style={{
-            position: "absolute", inset: 0, borderRadius: "12px", overflow: "hidden",
+            position: "absolute", inset: 0, overflow: "hidden",
             backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden",
-            backgroundColor: CARD_BG,
+            backgroundColor: INNER_BG,
+            border: `1px solid ${BORDER}`,
             boxShadow: hovered
-              ? `0 0 0 1px ${ACCENT}55, 0 20px 55px rgba(0,0,0,0.8), 0 0 40px ${ACCENT}30`
-              : `0 0 0 1px ${ACCENT}20, 0 10px 35px rgba(0,0,0,0.65)`,
+              ? `0 20px 55px rgba(0,0,0,0.8), 0 0 40px ${ACCENT}30`
+              : `0 10px 35px rgba(0,0,0,0.65)`,
             transition: "box-shadow 0.35s ease",
           }}>
+
+            <CornerBrackets color={hovered ? "#6B5BB0" : CORNER} size={14} thickness={2} />
+
             <div style={{
               position: "absolute", width: "224px", height: "192px",
               background: "white", filter: "blur(50px)",
@@ -177,11 +182,11 @@ export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: 
             }} />
 
             <div style={{
-              position: "absolute", inset: "2px", borderRadius: "10px",
-              background: INNER_BG, zIndex: 1,
-              display: "flex", flexDirection: "column", overflow: "hidden",
+              position: "relative", inset: 0,
+              display: "flex", flexDirection: "column",
+              height: "100%", overflow: "hidden", zIndex: 1,
             }}>
-              {/* avatar */}
+
               <div style={{ position: "relative", flex: "1 1 auto", overflow: "hidden", minHeight: 0 }}>
                 <img
                   src={member.avatar} alt={member.name}
@@ -197,10 +202,10 @@ export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: 
               </div>
 
               <div style={{ padding: "10px 12px 12px", flexShrink: 0 }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "4px", marginTop: "8px" }}>
-                <div style={{ color: "#fffff", fontWeight: 700, fontSize: "20px", lineHeight: "1.2", letterSpacing: "-0.01em" }}>
-                  {member.name}
-                </div>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "4px", marginTop: "8px" }}>
+                  <div style={{ color: "#ffffff", fontWeight: 700, fontSize: "20px", lineHeight: "1.2", letterSpacing: "-0.01em" }}>
+                    {member.name}
+                  </div>
                   <a
                     href={`https://twitter.com/${member.twitter.replace(/^.*\/|@/g, "")}`}
                     onClick={(e) => e.stopPropagation()}
@@ -218,7 +223,7 @@ export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: 
                     {member.twitter}
                   </a>
                 </div>
-                
+
                 <div style={{ color: "#fff", fontSize: "10px", marginTop: "2px" }}>{member.role}</div>
                 <div style={{ color: `${ACCENT}bb`, fontSize: "12px" }}>{member.company}</div>
 
@@ -242,14 +247,17 @@ export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: 
             </div>
           </div>
 
-          {/* ══ BACK ══ */}
           <div style={{
-            position: "absolute", inset: 0, borderRadius: "12px", overflow: "hidden",
+            position: "absolute", inset: 0, overflow: "hidden",
             backfaceVisibility: "hidden", WebkitBackfaceVisibility: "hidden",
             transform: "rotateY(180deg)",
-            backgroundColor: CARD_BG,
-            boxShadow: `0 0 0 1px ${ACCENT}55, 0 20px 55px rgba(0,0,0,0.8), 0 0 50px ${ACCENT}30`,
+            backgroundColor: INNER_BG,
+            border: `1px solid ${BORDER}`,
+            boxShadow: `0 20px 55px rgba(0,0,0,0.8), 0 0 50px ${ACCENT}30`,
           }}>
+
+            <CornerBrackets color={CORNER} size={14} thickness={2} />
+
             <div style={{
               position: "absolute", width: "224px", height: "192px",
               background: "white", filter: "blur(50px)",
@@ -257,64 +265,65 @@ export const MemberCard = memo(function MemberCard({ member, flipped, onFlip }: 
             }} />
 
             <div style={{
-              position: "absolute", inset: "2px", borderRadius: "10px",
-              background: INNER_BG, zIndex: 1, overflow: "hidden",
+              position: "absolute", top: 0, left: 0, right: 0, height: "120px", opacity: 0.4,
+              background: `radial-gradient(ellipse at 50% 0%, ${ACCENT}, transparent 70%)`,
+              pointerEvents: "none", zIndex: 1,
+            }} />
+
+            <div style={{
+              position: "relative", padding: "20px", height: "100%",
+              display: "flex", flexDirection: "column", boxSizing: "border-box", zIndex: 2,
             }}>
               <div style={{
-                position: "absolute", top: 0, left: 0, right: 0, height: "120px", opacity: 0.4,
-                background: `radial-gradient(ellipse at 50% 0%, ${ACCENT}, transparent 70%)`,
-                pointerEvents: "none",
-              }} />
+                color: "#e2d9ff", fontSize: "11px", fontWeight: 700,
+                letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "16px",
+              }}>◈ Achievements</div>
 
-              <div style={{
-                position: "relative", padding: "20px", height: "100%",
-                display: "flex", flexDirection: "column", boxSizing: "border-box",
-              }}>
-                <div style={{
-                  color: "#e2d9ff", fontSize: "11px", fontWeight: 700,
-                  letterSpacing: "0.14em", textTransform: "uppercase", marginBottom: "16px",
-                }}>◈ Achievements</div>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1, overflow: "hidden" }}>
-                  {member.achievements.slice(0, 3).map((a, i) => (
-                    <div key={i} style={{
-                      display: "flex", gap: "12px", padding: "12px", borderRadius: "11px",
-                      background: `${ACCENT}12`, border: `1px solid ${ACCENT}35`,
-                    }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: "10px", flex: 1, overflow: "hidden" }}>
+                {member.achievements.slice(0, 3).map((a, i) => (
+                  <div key={i} style={{
+                    display: "flex", gap: "12px", padding: "12px", borderRadius: "11px",
+                    background: `${ACCENT}12`, border: `1px solid ${ACCENT}35`,
+                  }}>
+                    <div style={{
+                      width: "40px", height: "40px", borderRadius: "9px", flexShrink: 0,
+                      display: "flex", alignItems: "center", justifyContent: "center",
+                      fontSize: "20px", background: `${ACCENT}22`,
+                    }}>{a.icon}</div>
+                    <div style={{ minWidth: 0 }}>
                       <div style={{
-                        width: "40px", height: "40px", borderRadius: "9px", flexShrink: 0,
-                        display: "flex", alignItems: "center", justifyContent: "center",
-                        fontSize: "20px", background: `${ACCENT}22`,
-                      }}>{a.icon}</div>
-                        <div style={{ minWidth: 0 }}>
-                          <div style={{
-                            color: "#ffffff", fontSize: "13px", fontWeight: 600,
-                            overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
-                          }}>{a.title}</div>
-                          {a.description && (
-                            <div style={{
-                              color: "#c4b8e8", fontSize: "11px", lineHeight: "1.4", marginTop: "3px",
-                              overflow: "hidden", display: "-webkit-box",
-                              WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const,
-                            }}>{a.description}</div>
-                          )}
-                        </div>
+                        color: "#ffffff", fontSize: "13px", fontWeight: 600,
+                        overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap",
+                      }}>{a.title}</div>
+                      {a.description && (
+                        <div style={{
+                          color: "#c4b8e8", fontSize: "11px", lineHeight: "1.4", marginTop: "3px",
+                          overflow: "hidden", display: "-webkit-box",
+                          WebkitLineClamp: 2, WebkitBoxOrient: "vertical" as const,
+                        }}>{a.description}</div>
+                      )}
                     </div>
-                  ))}
-                </div>
-                <button
-                  onClick={(e) => { e.stopPropagation(); setModalOpen(true); }}
-                  style={{
-                    marginTop: "14px", width: "100%", padding: "11px", borderRadius: "10px",
-                    fontSize: "13px", fontWeight: 600, cursor: "pointer",
-                    background: `linear-gradient(135deg, ${ACCENT}33, ${ACCENT}18)`,
-                    border: `1px solid ${ACCENT}60`, color: "#e2d9ff",
-                    transition: "transform 0.15s",
-                  }}
-                  onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.03)"; }}
-                  onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)"; }}
-                >Full Profile →</button>
+                  </div>
+                ))}
               </div>
+
+              <button
+                onClick={(e) => { e.stopPropagation(); setModalOpen(true); }}
+                style={{
+                  marginTop: "14px", width: "100%", padding: "11px",
+                  fontSize: "13px", fontWeight: 600, cursor: "pointer",
+                  background: `linear-gradient(135deg, ${ACCENT}33, ${ACCENT}18)`,
+                  border: `1px solid ${ACCENT}60`, color: "#e2d9ff",
+                  transition: "transform 0.15s",
+                  borderRadius: 0,
+                  position: "relative",
+                }}
+                onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1.03)"; }}
+                onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.transform = "scale(1)"; }}
+              >
+                <CornerBrackets color={CORNER} size={8} thickness={1.5} />
+                Full Profile →
+              </button>
             </div>
           </div>
 

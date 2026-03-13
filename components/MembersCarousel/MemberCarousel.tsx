@@ -42,7 +42,6 @@ export function CardCarouselLoop() {
       setFlippedIds({});  
     }, []);
     
-    /* RAF animation loop */
     useEffect(() => {
       if (!trackRef.current || seqWidth === 0) return;
   
@@ -72,6 +71,7 @@ export function CardCarouselLoop() {
     }, [seqWidth]);
   
     return (
+      
       <div
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
@@ -98,6 +98,7 @@ export function CardCarouselLoop() {
             gap: `${GAP}px`,
           }}
         >
+          
           {Array.from({ length: COPIES }, (_, copyIdx) =>
             members.map((member) => (
               <MemberCard
