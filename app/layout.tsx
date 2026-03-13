@@ -3,7 +3,10 @@ import { Inter, Figtree } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 
-const figtree = Figtree({subsets:['latin'],variable:'--font-sans'});
+import { Navbar } from "@/components/Navbar";
+import Footer from "@/components/Footer";
+
+const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
 const inter = Inter({
   subsets: ["latin"],
@@ -19,10 +22,17 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={cn("font-sans", figtree.variable)}>
-      <body className={`${inter.className} min-h-screen text-neutral-50`}>
-        {children}
+      <body className={`${inter.className} min-h-screen text-neutral-50 flex flex-col`}>
+        
+        <Navbar />
+
+        <main className="flex-1">
+          {children}
+        </main>
+
+        <Footer />
+
       </body>
     </html>
   );
 }
-

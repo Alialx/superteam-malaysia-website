@@ -30,4 +30,15 @@ export default defineConfig({
   images: {
     domains: ['cdn.sanity.io'],
   },
+  document: {
+    actions: (prev, { schemaType }) => {
+      if (schemaType === 'stat') {
+        // ensure delete is never filtered out
+        return prev.filter((action) =>
+          ['publish', 'unpublish', 'discardChanges', 'restore', 'delete', 'duplicate'].includes(action.action ?? '')
+        )
+      }
+      return prev
+    },
+  },
 })

@@ -38,7 +38,7 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts"
-  ],
+, "components/TwitterGrid.jsx"  ],
   "exclude": [
     "node_modules"
   ]
