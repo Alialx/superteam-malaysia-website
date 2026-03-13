@@ -1,4 +1,4 @@
-# Superteam Malaysia Website
+# Superteam Malaysia — Website
 
 Official website for Superteam Malaysia. Features a community landing page, members directory, events feed, ecosystem partners, and featured projects.
 
@@ -140,7 +140,24 @@ All changes go live within ~60 seconds via ISR revalidation.
 
 ### Luma Events
 
-Events are fetched via `lib/luma/client.ts` and rendered in `LumaEvents.tsx`. A webhook handler at `app/api/luma/webhook/route.ts` receives Luma event notifications and can trigger revalidation. Requires `LUMA_API_KEY` in `.env.local`.
+The events section is built and wired up but currently **blank** as Superteam Malaysia does not have an active Luma API key yet. The fetch logic in `lib/luma/client.ts` and `lib/luma/queries.ts` is complete but commented out in `LumaEvents.tsx` and `LumaSection.tsx`.
+
+To enable it when a Luma API key is available:
+1. Add `LUMA_API_KEY=your_key` to `.env.local`
+2. Uncomment the fetch calls in `LumaEvents.tsx` and `LumaSection.tsx`
+3. The webhook handler at `app/api/luma/webhook/route.ts` is already set up to receive Luma event notifications
+
+---
+
+### Wall of Love — Twitter/X Posts
+
+The Wall of Love section (`TwitterGrid.tsx`) displays a curated grid of tweets about Superteam Malaysia. Posts are **managed externally via [Curator.io](https://curator.io)** — the component embeds the Curator widget which pulls and renders the approved tweets.
+
+To manage the posts:
+- Log in to [curator.io](https://curator.io) and open the Superteam Malaysia feed
+- Approve or remove tweets from the moderation queue
+- To change the number of posts displayed, the layout, or the styling — edit the feed settings directly inside Curator's dashboard, not in the code
+- Any changes in Curator reflect on the site automatically without a redeployment
 
 ---
 
