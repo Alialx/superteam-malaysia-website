@@ -1,4 +1,13 @@
 import { sanityClient } from './client'
+import { groq } from 'next-sanity'
+
+export interface SanityLogo {
+  _id: string
+  name: string
+  logo: string
+  href?: string
+  displayOrder: number
+}
 
 export interface SanitySkill {
   _id: string
@@ -41,11 +50,120 @@ export interface SanityStat {
   _id: string
   label: string
   value: number
-  suffix?: string
-  icon?: string
+  prefix?: string 
+  suffix?: string  
 }
 
-// QUERIES
+export interface SanityPartner {
+  _id: string
+  name: string
+  url?: string
+  row: number
+  order: number
+  logoUrl: string
+  logoType: string
+}
+
+export interface SanityPerson {
+  _key: string
+  name: string
+  initials: string
+  avatarColor?: string
+}
+ 
+export interface SanityAward {
+  _key: string
+  label: string
+  tier: 'gold' | 'silver' | 'default'
+  date?: string
+}
+ 
+export interface SanityProject {
+  _id: string
+  title: string
+  slug: string
+  tag: string
+  description: string
+  imageUrl?: string
+  href: string
+  people: SanityPerson[]
+  awards?: SanityAward[]
+  order?: number
+}
+
+export interface SanityGalleryImage {
+  _key: string
+  imageUrl: string
+  alt?: string
+}
+
+export interface SanityGallery {
+  _id: string
+  title: string
+  images: SanityGalleryImage[]
+}
+
+export const galleryQuery = groq`
+  *[_type == "gallery"][0] {
+    _id,
+    title,
+    images[] {
+      _key,
+      "imageUrl": image.asset->url,
+      alt,
+    },
+  }
+`
+
+export const projectsQuery = groq`
+  *[_type == "project"] | order(order asc, _createdAt desc) {
+    _id,
+    title,
+    "slug": slug.current,
+    tag,
+    description,
+    "imageUrl": image.asset->url,
+    href,
+    people[] {
+      _key,
+      name,
+      initials,
+      avatarColor,
+    },
+    awards[] {
+      _key,
+      label,
+      tier,
+      date,
+    },
+    order,
+  }
+`
+ 
+export const projectBySlugQuery = groq`
+  *[_type == "project" && slug.current == $slug][0] {
+    _id,
+    title,
+    "slug": slug.current,
+    tag,
+    description,
+    "imageUrl": image.asset->url,
+    href,
+    people[] {
+      _key,
+      name,
+      initials,
+      avatarColor,
+    },
+    awards[] {
+      _key,
+      label,
+      tier,
+      date,
+    },
+    order,
+  }
+`
 const MEMBERS_QUERY = `*[_type == "member"] | order(displayOrder asc) {
   _id,
   name,
@@ -99,6 +217,25 @@ const STATS_QUERY = `*[_type == "stat"] | order(displayOrder asc) {
   icon,
 }`
 
+const LOGO_QUERY = `*[_type == "logo" && isActive == true] | order(displayOrder asc) {
+  _id,
+  name,
+  "logo": logo.asset->url + "?auto=format",
+  href,
+  displayOrder
+}`
+
+const PARTNERS_QUERY = `*[_type == "ecosystemPartner" && isActive == true] | order(row asc, order asc) {
+  _id,
+  name,
+  "logoUrl": logo.asset->url + "?auto=format",
+  "logoType": logo.asset->extension,
+  url,
+  row,
+  order
+}`
+
+
 export async function getAllMembers(): Promise<SanityMember[]> {
   return sanityClient.fetch(MEMBERS_QUERY)
 }
@@ -121,6 +258,22 @@ export async function getFAQs(): Promise<SanityFAQ[]> {
 
 export async function getStats(): Promise<SanityStat[]> {
   return sanityClient.fetch(STATS_QUERY)
+}
+
+export async function getLogos(): Promise<SanityLogo[]> {
+  return sanityClient.fetch(LOGO_QUERY)
+}
+
+export async function getPartners(): Promise<SanityPartner[]> {
+  return sanityClient.fetch(PARTNERS_QUERY)
+}
+
+export async function getProjects(): Promise<SanityProject[]> {
+  return sanityClient.fetch<SanityProject[]>(projectsQuery)
+}
+
+export async function getGallery(): Promise<SanityGallery | null> {
+  return sanityClient.fetch<SanityGallery | null>(galleryQuery)
 }
 
 export function mapSanityMember(member: SanityMember, index: number) {

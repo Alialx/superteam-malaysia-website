@@ -18,28 +18,16 @@ export const statType = defineType({
       validation: Rule => Rule.required()
     }),
     defineField({
+      name: 'prefix',
+      title: 'Prefix',
+      type: 'string',
+      description: 'e.g. $, RM,  leave empty if none',
+    }),
+    defineField({
       name: 'suffix',
       title: 'Suffix',
       type: 'string',
-      description: 'e.g. +, K, M — leave empty if none',
-    }),
-    defineField({
-      name: 'icon',
-      title: 'Icon',
-      type: 'string',
-      description: 'Lucide icon name e.g. Users, FileText, Settings',
-      options: {
-        list: [
-          { title: 'Users', value: 'Users' },
-          { title: 'FileText', value: 'FileText' },
-          { title: 'Settings', value: 'Settings' },
-          { title: 'UsersRound', value: 'UsersRound' },
-          { title: 'DollarSign', value: 'DollarSign' },
-          { title: 'Trophy', value: 'Trophy' },
-          { title: 'Globe', value: 'Globe' },
-          { title: 'Zap', value: 'Zap' },
-        ]
-      }
+      description: 'e.g. k, +, can be k+, leave empty if none',
     }),
     defineField({
       name: 'displayOrder',
@@ -47,6 +35,7 @@ export const statType = defineType({
       type: 'number',
     }),
   ],
+  
   preview: {
     select: { title: 'label', subtitle: 'value' }
   },
