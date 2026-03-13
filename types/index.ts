@@ -122,23 +122,14 @@ export interface ShinyTextProps {
     delay?: number;
   }
 
-export type LogoItem =
-| {
-    node: React.ReactNode;
-    href?: string;
-    title?: string;
-    ariaLabel?: string;
+export interface LogoItem {
+  src: string
+  alt: string
+  title?: string
+  href?: string
+  width?: number
+  height?: number
 }
-| {
-    src: string;
-    alt?: string;
-    href?: string;
-    title?: string;
-    srcSet?: string;
-    sizes?: string;
-    width?: number;
-    height?: number;
-};
 
 export interface LogoLoopProps {
   logos: LogoItem[];
@@ -158,7 +149,23 @@ export interface LogoLoopProps {
   style?: React.CSSProperties;
 }
 
+export interface AnimatedButtonProps {
+    href: string
+    label?: string
+    delay?: number
+    external?: boolean
+  }
+
+export interface FeatureCard {
+    title: string
+    description: string
+    /** optional: 'top' = text at top, 'bottom' = text at bottom */
+    textPosition?: 'top' | 'bottom'
+  }
   
+export interface StatGridProps {
+  stats: SanityStat[]
+}
 // ── Sanity ────────────────────────────────────────────
 
 export interface Badge {
